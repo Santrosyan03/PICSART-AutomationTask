@@ -75,7 +75,7 @@ public class MainTest extends RootTest {
         WebElement asset;
         int k;
         for (k = 0; k < allElementsList.size(); k++) {
-            assertEquals(allElementsList.get(k).findElement(By.cssSelector("a")).getAttribute("rel"), "nofollow");
+            assertEquals(driver.findElement(By.cssSelector("#base_card_item" + k + " > a")).getAttribute("rel"), "nofollow");
             k++;
         }
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.id("base_card_item" + k
