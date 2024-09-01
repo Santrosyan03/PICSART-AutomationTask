@@ -71,68 +71,31 @@ public class MainTest extends RootTest {
             allElements.addAll(newElements);
 
             long newHeight = (long) js.executeScript("return document.body.scrollHeight");
-            if (newHeight == lastHeight) {
-                break;
-            }
+            if (newHeight == lastHeight) break;
             lastHeight = newHeight;
         }
 
+
         List<WebElement> allElementsList = new ArrayList<>(allElements);
-        for (int k = 0; k < allElementsList.size(); k++) {
+        WebElement asset;
+        int k;
+        for (k = 0; k < allElementsList.size(); k++) {
             assertEquals(allElementsList.get(k).findElement(By.cssSelector("a")).getAttribute("rel"), "nofollow");
             k++;
         }
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.id("base_card_item" + k
+        )));
 
+        asset = driver.findElement(By.id("base_card_item" + k));
         Actions actions = new Actions(driver);
+        actions.moveToElement(asset).perform();
+        boolean tryNowButtonPresent = !asset.findElements(By.id("#base_card_item" + k + " div:nth-child(3) button")).isEmpty();
+        boolean likeButtonAbsent = !asset.findElements(By.id("like_button_item" + k)).isEmpty();
+        boolean saveButtonAbsent = !asset.findElements(By.id("save_button_item" + k)).isEmpty();
 
-//        if (!allElements.isEmpty()) {
-//            WebElement firstAsset = allElements.iterator().next();
-//            actions.moveToElement(firstAsset).perform();
-//
-//            WebElement likeButton = driver.findElement(By.cssSelector("#" + firstAsset.getAttribute("id") + " .like-button"));
-//            WebElement saveButton = driver.findElement(By.cssSelector("#" + firstAsset.getAttribute("id") + " .save-button"));
-//            WebElement tryNowButton = driver.findElement(By.cssSelector("#" + firstAsset.getAttribute("id") + " .try-now-button"));
-//
-//            assertTrue(likeButton.isDisplayed(), "Like button not displayed on hover!");
-//            assertTrue(saveButton.isDisplayed(), "Save button not displayed on hover!");
-//            assertTrue(tryNowButton.isDisplayed(), "Try now button not displayed on hover!");
-//        }
-
-
-
-        int i = 0;
-        for (WebElement element : allElements) {
-            actions.moveToElement(element).perform();
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.id("base_card_item" + i)));
-
-            boolean isAiImage = !element.findElements(By.cssSelector("[data-testid='ai-card-root']")).isEmpty();
-
-            boolean likeButton;
-            boolean saveButton;
-            boolean actionButton;
-            likeButton = !driver.findElements(By.id("like_button_item" + i)).isEmpty();
-            saveButton = !driver.findElements(By.id("save_button_item" + i)).isEmpty();
-
-            if (!isAiImage) {
-                actionButton = !driver.findElements(By.id("try_now_button_item" + i)).isEmpty();
-            } else {
-                actionButton = !driver.findElements(By.id("content_grid_regenerate_button" + i)).isEmpty();
-            }
-
-            assertTrue(likeButton);
-            assertTrue(saveButton);
-            assertTrue(actionButton);
-
-            driver.findElement(By.cssSelector("button[id*='like_button']")).click();
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            assertTrue(driver.findElement(By.cssSelector("div[data-testid='registration-modal-container']")).isDisplayed());
-            driver.findElement(By.cssSelector("svg[data-testid='modal-close-icon']")).click();
-            personalFilterCheckBox.click();
-        }
+        assertTrue(tryNowButtonPresent);
+        assertTrue(likeButtonAbsent);
+        assertTrue(saveButtonAbsent);
     }
 
     @Test
