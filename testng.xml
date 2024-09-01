@@ -1,0 +1,23 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="ParallelTestSuite" parallel="tests" thread-count="3">
+    <test name="Test_Resolution_1024x768">
+        <parameter name="resolution" value="1024x768" />
+        <classes>
+            <class name="org.task.MainTest" />
+        </classes>
+    </test>
+
+    <test name="Test_Resolution_1366x768">
+        <parameter name="resolution" value="1366x768" />
+        <classes>
+            <class name="org.task.MainTest" />
+        </classes>
+    </test>
+
+    <test name="Test_Resolution_1440x900">
+        <parameter name="resolution" value="1440x900" />
+        <classes>
+            <class name="org.task.MainTest" />
+        </classes>
+    </test>
+</suite>
