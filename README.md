@@ -26,3 +26,10 @@ cd PICSART-AutomationTask
 ```
 mvn test
 ```
+### OR
+
+```
+Go to src/test/java/org/task/MainTest.java 
+and click on run button on 13th line
+```
+
