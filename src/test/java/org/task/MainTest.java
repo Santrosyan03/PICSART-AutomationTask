@@ -84,7 +84,7 @@ public class MainTest extends RootTest {
         asset = driver.findElement(By.id("base_card_item" +  allElementsList.get(k-1).getAttribute("id").substring(14)));
         Actions actions = new Actions(driver);
         actions.moveToElement(asset).perform();
-        WebElement tryNowButtonPresent = asset.findElement(By.cssSelector("#base_card_item" +  allElementsList.get(k-1).getAttribute("id").substring(14) + " div:nth-child(3) button"));
+        WebElement tryNowButtonPresent = asset.findElement(By.cssSelector("#base_card_item" +  allElementsList.get(k-1).getAttribute("id").substring(14) + " div > button"));
         WebElement likeButtonAbsent = asset.findElement(By.cssSelector("#base_card_item" +  allElementsList.get(k-1).getAttribute("id").substring(14) + " button:nth-child(1)"));
         WebElement saveButtonAbsent = asset.findElement(By.cssSelector("#base_card_item" +  allElementsList.get(k-1).getAttribute("id").substring(14) + " button:nth-child(2)"));
 
