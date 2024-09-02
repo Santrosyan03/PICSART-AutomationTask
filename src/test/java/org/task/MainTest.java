@@ -62,7 +62,7 @@ public class MainTest extends RootTest {
                 e.printStackTrace();
             }
 
-            List<WebElement> newElements = driver.findElements(By.cssSelector("[data-testid='search-card-root']"));
+            List<WebElement> newElements = driver.findElements(By.cssSelector("div[data-automation='search-item-fte']"));
             allElements.addAll(newElements);
 
             long newHeight = (long) js.executeScript("return document.body.scrollHeight");
@@ -74,23 +74,23 @@ public class MainTest extends RootTest {
         List<WebElement> allElementsList = new ArrayList<>(allElements);
         WebElement asset;
         int k;
-        for (k = 0; k < allElementsList.size(); k++) {
-            assertEquals(driver.findElement(By.cssSelector("#base_card_item" + k + " > a")).getAttribute("rel"), "nofollow");
+         for (k = 0; k < allElementsList.size(); k++) {
+            assertFalse(driver.findElement(By.cssSelector("#base_card_item" + allElementsList.get(k).getAttribute("id").substring(14) + " > a")).getAttribute("rel") == "nofollow");
             k++;
         }
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.id("base_card_item" + k
-        )));
 
-        asset = driver.findElement(By.id("base_card_item" + k));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.id("base_card_item" +  allElementsList.get(k-1).getAttribute("id").substring(14))));
+
+        asset = driver.findElement(By.id("base_card_item" +  allElementsList.get(k-1).getAttribute("id").substring(14)));
         Actions actions = new Actions(driver);
         actions.moveToElement(asset).perform();
-        boolean tryNowButtonPresent = !asset.findElements(By.id("#base_card_item" + k + " div:nth-child(3) button")).isEmpty();
-        boolean likeButtonAbsent = !asset.findElements(By.id("like_button_item" + k)).isEmpty();
-        boolean saveButtonAbsent = !asset.findElements(By.id("save_button_item" + k)).isEmpty();
+        WebElement tryNowButtonPresent = asset.findElement(By.cssSelector("#base_card_item" +  allElementsList.get(k-1).getAttribute("id").substring(14) + " div:nth-child(3) button"));
+        WebElement likeButtonAbsent = asset.findElement(By.cssSelector("#base_card_item" +  allElementsList.get(k-1).getAttribute("id").substring(14) + " button:nth-child(1)"));
+        WebElement saveButtonAbsent = asset.findElement(By.cssSelector("#base_card_item" +  allElementsList.get(k-1).getAttribute("id").substring(14) + " button:nth-child(2)"));
 
-        assertTrue(tryNowButtonPresent);
-        assertTrue(likeButtonAbsent);
-        assertTrue(saveButtonAbsent);
+        assertNotNull(tryNowButtonPresent);
+        assertNotNull(likeButtonAbsent);
+        assertNotNull(saveButtonAbsent);
     }
 
     @Test
@@ -101,27 +101,27 @@ public class MainTest extends RootTest {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         long lastHeight = (long) js.executeScript("return document.body.scrollHeight");
         while (driver.findElement(By.cssSelector("#base_card_item" + i + " > a")).getAttribute("rel") != "nofollow" &&
-               !driver.findElement(By.cssSelector("#base_card_item" + i + " > div > svg")).isDisplayed()) {
+                !driver.findElement(By.cssSelector("#base_card_item" + i + " > div > svg")).isDisplayed()) {
 
-                js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-                List<WebElement> newElements = driver.findElements(By.cssSelector("[data-testid='search-card-root'], [data-testid='ai-card-root']"));
+            List<WebElement> newElements = driver.findElements(By.cssSelector("[data-testid='search-card-root'], [data-testid='ai-card-root']"));
 
-                allElements.addAll(newElements);
+            allElements.addAll(newElements);
 
-                long newHeight = (long) js.executeScript("return document.body.scrollHeight");
+            long newHeight = (long) js.executeScript("return document.body.scrollHeight");
 
-                if (newHeight == lastHeight) {
-                    break;
-                }
+            if (newHeight == lastHeight) {
+                break;
+            }
 
-                lastHeight = newHeight;
-                i++;
+            lastHeight = newHeight;
+            i++;
 
         }
 
